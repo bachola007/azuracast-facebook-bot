@@ -20,7 +20,7 @@ def get_now_playing():
         title = song.get('title', '')
         artist = song.get('artist', '')
         album_art = song.get('art', '') or data.get('now_playing', {}).get('art', '')
-        stream_url = data.get('station', {}).get('listen_url', '')
+        stream_url = "https://forwardmystream.com/station/mawalkingradiostation"
 
         if title and artist:
             return title, artist, album_art, stream_url
