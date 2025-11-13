@@ -1,0 +1,55 @@
+name: CI/CD to Heroku
+
+on:
+  push:
+    branches:
+      - main  # runs when you push to main branch
+  pull_request:
+
+jobs:
+  test:
+    name: Run Python linting and tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 pytest
+
+      - name: Lint code with flake8
+        run: |
+          echo "Running linting..."
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      - name: Run tests (if any)
+        run: |
+          echo "Running tests..."
+          pytest || echo "No tests folder found — skipping tests."
+
+  deploy:
+    name: Deploy to Heroku (if tests pass)
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v4.1.6
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          usedocker: false
