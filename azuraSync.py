@@ -1,4 +1,9 @@
-import requests
+import importlib
+try:
+    requests = importlib.import_module("requests")
+except ImportError:
+    raise ImportError("requests module not found. Install with: pip install requests")
+
 import time
 import os
 import json
@@ -76,7 +81,7 @@ def get_now_playing():
             or now.get("art")
         )
 
-        stream_url = "https://forwardmystream.com/station/mawalkingradiostation"
+        stream_url = "https://bit.ly/42rrCnl"
 
         return title, artist, album_art, stream_url
 
