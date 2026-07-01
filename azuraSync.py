@@ -112,7 +112,7 @@ def post_to_facebook(message, album_art, stream_url, retries=3):
     url = f"https://graph.facebook.com/{FB_PAGE_ID}/photos"
 
     payload = {
-        "caption": f"{message}\n\n🎧 Listen live: {stream_url}",
+        "caption": f"{message}\n\n🎧 @Followers #Rhumba Listen live: {stream_url}",
         "url": album_art,
         "access_token": FB_ACCESS_TOKEN
     }
